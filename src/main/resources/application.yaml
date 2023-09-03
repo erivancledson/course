@@ -1,0 +1,44 @@
+server:
+  port: 8082
+  servlet: #predicates do gateway
+    context-path: '/ead-course/'
+
+spring:
+  application:
+    name: ead-course-service #nome que vai ser visto no eureka
+  datasource:
+    url:  jdbc:postgresql://localhost:5432/ead-course-v2
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+      jdbc:
+        lob.non-contextual-creation: true
+    properties:
+      hibernate:
+        show_sql: true
+  output:
+    ansi:
+      enabled: Always
+  rabbitmq:
+    addresses: amqps://ecxjwsmx:zgwxqhWeA6tn8XkkhVVMQyKX0w7qfvxj@woodpecker.rmq.cloudamqp.com/ecxjwsmx
+
+ead:
+  api:
+    url: #passa o nome do eureka do authuser
+      authuser: 'http://ead-authuser-service/ead-authuser'
+  broker:
+    exchange:
+      userEventExchange: ead.userevent #exchange que foi criado em usuario
+    queue:
+      userEventQueue:
+        name: ead.userevent.ms.course #criado uma fila
+
+eureka: #configuracoes do eureka
+  client:
+    service-url:
+      defaultZone: 'http://localhost:8761/eureka'
+  instance:
+    hostname: localhost
