@@ -26,19 +26,34 @@ spring:
     addresses: amqps://ecxjwsmx:zgwxqhWeA6tn8XkkhVVMQyKX0w7qfvxj@woodpecker.rmq.cloudamqp.com/ecxjwsmx
 
 ead:
+  serviceRegistry: #autenticar no eureka quando tem spring security
+    username: serviceregistry
+    password: '123ead'
   api:
     url: #passa o nome do eureka do authuser
       authuser: 'http://ead-authuser-service/ead-authuser'
   broker:
     exchange:
       userEventExchange: ead.userevent #exchange que foi criado em usuario
+      notificationCommandExchange: ead.notificationcommand #notification via comando
     queue:
       userEventQueue:
         name: ead.userevent.ms.course #criado uma fila
+    key:
+      notificationCommandKey: ms.notification #binding     do command projeto notification
+
+
+  management: #actuator
+    endpoints:
+      web:
+        exposure:
+          include:
+            -refresh
+            -health
 
 eureka: #configuracoes do eureka
   client:
     service-url:
-      defaultZone: 'http://localhost:8761/eureka'
+      defaultZone: 'http://${ead.serviceRegistry.username}:${ead.serviceRegistry.password}@localhost:8761/eureka'
   instance:
     hostname: localhost

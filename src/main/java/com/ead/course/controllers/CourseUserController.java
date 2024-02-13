@@ -59,7 +59,7 @@ public class CourseUserController {
         if(userModelOptional.get().getUserStatus().equals(UserStatus.BLOCKED.toString())){ //se o usuario estiver bloqueado
             return ResponseEntity.status(HttpStatus.CONFLICT).body("User is blocked.");
         }
-        courseService.saveSubscriptionUserInCourse(courseModelOptional.get().getCourseId(), userModelOptional.get().getUserId());
+        courseService.saveSubscriptionUserInCourseAndSendNotification(courseModelOptional.get(), userModelOptional.get()); //ele salva a relação e envia a mensagem via command
         return ResponseEntity.status(HttpStatus.CREATED).body("Subscription created successfully.");
     }
 
